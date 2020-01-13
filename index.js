@@ -48,7 +48,22 @@ app.get('/api/users/:id', (req, res) => {
 
 //Add new user to db
 app.post('/api/users', (req, res) => {
-
+  const newUser = req.body;
+  insert(newUser)
+    .then(user => {
+      res.status(201).json(user);
+    })
+    .catch(error => {
+      if (!newUser.name || !newUser.bio) {
+        res.status(400).json({
+          errorMessage: "Please provide name and bio for the user."
+        });
+      } else {
+        res.status(500).json({
+          errorMessage: "There was an error while saving the user to the database"
+        })
+      }
+    })
 })
 
 //Modify user details
