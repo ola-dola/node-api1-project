@@ -103,6 +103,20 @@ app.put("/api/users/:id", (req, res) => {
 
 app.delete("/api/users/:id", (req, res) => {
   const { id } = req.params;
+  remove(id)
+    .then(data => {
+      // throw new Error("dont be asleep");
+      if (data > 0) {
+        res.send("User deleted successfully");
+      } else {
+        res
+          .status(404)
+          .json({ message: "The user with the specified ID does not exist." });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ errorMessage: "The user could not be removed" });
+    });
 });
 
 app.listen(5100, () => {
